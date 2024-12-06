@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compound Interest Calculator</title>
+    <script>
+        async function calculateProfit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch("", {
+                method: "POST",
+                body: formData,
+                headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value }
+            });
+            const data = await response.json();
+            if (data.result) {
+                document.getElementById("result").value = data.result;
+            } else {
+                alert("Error: " + data.error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Compound Interest Calculator</h1>
+    <form id="investmentForm" onsubmit="calculateProfit(event)">
+        {% csrf_token %}
+        <label for="monthly_invest">Monthly Invest:</label>
+        <input type="text" id="monthly_invest" name="monthly_invest"><br><br>
+
+        <label for="roi">Monthly Rate of Interest:</label>
+        <input type="text" id="roi" name="roi"><br><br>
+
+        <label for="tenure">Total Tenure in Months:</label>
+        <input type="text" id="tenure" name="tenure"><br><br>
+
+        <button type="submit">Submit</button><br><br>
+
+        <label for="result">Overall Profit:</label>
+        <input type="text" id="result" name="result" readonly>
+    </form>
+</body>
+</html>
